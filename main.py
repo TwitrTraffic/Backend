@@ -51,6 +51,12 @@ def loadDb():
 	getTwitterFeed()
 	return render_template('home.html')
 
+#Sample API HIT: curl -i http://localhost:5000/api/blrttweets
+@app.route("/api/blrttweets", methods=['GET'])
+def blrttweets():
+	tweets = retrieveAllblrTweets()
+	return jsonify({'tweets': tweets}), 201
+		
 
 
 #Sample API HIT: curl -i -H "Content-Type: application/json" -X POST -d '{"to":"mvit","from":"hebbal","day":"thursday","time":"13:32:12"}' http://localhost:5000/api/route

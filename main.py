@@ -46,6 +46,10 @@ def internal_server_error(e):
 def mainInit():
 	return render_template('home.html')
 
+@app.route("/loadDb")
+def loadDb():
+	getTwitterFeed()
+	return render_template('home.html')
 
 
 

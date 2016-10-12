@@ -47,3 +47,32 @@ def mainInit():
 	return render_template('home.html')
 
 
+
+
+#Sample API HIT: curl -i -H "Content-Type: application/json" -X POST -d '{"to":"mvit","from":"hebbal","day":"thursday","time":"13:32:12"}' http://localhost:5000/api/route
+@app.route("/api/route", methods = ['POST'])
+def inputRoute():
+    if not request.json:
+        abort(400)
+    if "to" not in request.json:
+    	abort(400)
+    if "from" not in request.json:
+    	abort(400)	
+    
+    source = request.json['to']
+    destination = request.json['from']
+    day = request.json['day']
+    time = request.json['time']
+
+    tasks=[]
+    task = {
+        'to': request.json['to'],
+        'from': request.json['from']
+    }
+    tasks.append(task)
+
+    return jsonify({'task': task}), 201
+
+
+if __name__ == "__main__":
+    app.run(debug = True)

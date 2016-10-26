@@ -134,9 +134,9 @@ def inputRoute():
 #				}
 
 
-#Sample API HIT: curl -i -H "Content-Type: application/json" -X POST -d '{"srclat":"40.81381340000001","srclong":"-74.06693179999999","destlat":"40.8145647","destlong":"-74.06878929999999"}' http://localhost:5000/api/checkpoints
-@app.route("/api/checkpoints", methods = ['POST'])
-def checkpoints():
+#Sample API HIT: curl -i -H "Content-Type: application/json" -X POST -d '{"srclat":"40.81381340000001","srclong":"-74.06693179999999","destlat":"40.8145647","destlong":"-74.06878929999999"}' http://localhost:5000/api/checkpoints/locations
+@app.route("/api/checkpoints/locations", methods = ['POST'])
+def checkpointsLocations():
     if not request.json:
         abort(400)
     if "srclat" not in request.json:
@@ -156,7 +156,30 @@ def checkpoints():
     json_checkpoints = getCheckpoints(source,destination)
     locations = getCheckpointLocations(source,destination,"","")
 
-    return jsonify({"checkpoints":locations}), 201
+    return jsonify({"checkpoints-locations":locations}), 201
+
+#Sample API HIT: curl -i -H "Content-Type: application/json" -X POST -d '{"srclat":"40.81381340000001","srclong":"-74.06693179999999","destlat":"40.8145647","destlong":"-74.06878929999999"}' http://localhost:5000/api/checkpoints/coordinates
+@app.route("/api/checkpoints/coordinates", methods = ['POST'])
+def checkpointsCoordinates():
+    if not request.json:
+        abort(400)
+    if "srclat" not in request.json:
+        abort(400)
+    if "srclong" not in request.json:
+        abort(400)
+    if "destlat" not in request.json:
+        abort(400)
+    if "destlong" not in request.json:
+        abort(400)
+    
+    #index '0'->lat ; '1'->long
+    source = [request.json['srclat'],request.json['srclong']]
+    destination = [request.json['destlat'],request.json['destlong']]
+    
+
+    json_checkpoints = getCheckpoints(source,destination)
+
+    return jsonify({"checkpoints-coordinates":json_checkpoints}), 201
 
 
 if __name__ == "__main__":

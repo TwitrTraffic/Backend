@@ -5,13 +5,14 @@ import sqlite3
 from contextlib import closing
 import requests
 from urllib2 import urlopen
+from keys import GoogleApiKey,twitter_consumer_key,twitter_consumer_secret,twitter_access_token,twitter_access_token_secret
 
-YOUR_API_KEY = ""
+YOUR_API_KEY = GoogleApiKey
 
-consumer_key = ""
-consumer_secret = ""
-access_token = ""
-access_token_secret = ""
+consumer_key = twitter_consumer_key
+consumer_secret = twitter_consumer_secret
+access_token = twitter_access_token
+access_token_secret = twitter_access_token_secret
 
 
 

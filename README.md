@@ -14,9 +14,26 @@ Flask server for APIs
 ---------
 # APIs
 
-- Send dummy Json with 'to', 'from', 'day' and 'time' fields and get back same data (intentional, for now)
+- Retrieve all twitter based traffic based on the route, between source and destination.
 
-```curl -i -H "Content-Type: application/json" -X POST -d '{"to":"mvit","from":"hebbal","day":"thursday","time":"13:32:12"}' http://localhost:5000/api/route```
+Sample Data:
+```
+{
+	"src":"mvit",
+	"srclat":"40.81381340000001",
+	"srclong":"-74.06693179999999",
+	"dest":"hebbal",
+	"destlat":"40.8145647",
+	"destlong":"-74.06878929999999",
+	"day":"thursday",
+	"time":"13:32:12"
+}
+```
+
+Example:
+```
+curl -i -H "Content-Type: application/json" -X POST -d '{"src":"mvit","srclat":"40.81381340000001","srclong":"-74.06693179999999","dest":"hebbal","destlat":"40.8145647","destlong":"-74.06878929999999","day":"thursday","time":"13:32:12"}' http://localhost:5000/api/route/traffic
+```
 
 - To retrieve all tweets from blrtraffic twitter feed
 

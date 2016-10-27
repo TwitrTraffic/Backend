@@ -98,7 +98,8 @@ def getCheckpointLocations(source,destination,day,time):
 
 	return json_checkpoint_locations
 
-def doActualWork(source,destination,day,time):
+
+def insertRouteIntoDb(source,destination,day,time):
     location_addr = getCheckpointLocations(source,destination,day,time)
 
     locations = []
@@ -111,15 +112,19 @@ def doActualWork(source,destination,day,time):
     locations_string = delim.join(locations)
 
     g.db.execute('insert into places values (?, ?, ?)',[source[2], destination[2], locations_string])
-    g.db.commit()    
+    g.db.commit() 
+
+    return locations   
+
+
+def getTrafficTweetsForRoute(locations,day,time):
 
     twittrafic = []
 
     for loction in locations:
-        cmd = "select tweet from tweets where tweet like '%" + loction + "%'"
+        cmd = "select tweet from tweets where tweet like '%" + loction + "%' and Tdate='" + day + "'"
         cur = g.db.execute(cmd)
         
-        #entries = []
         for row in cur.fetchall():
             twittrafic.append(row)
 

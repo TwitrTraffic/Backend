@@ -1,5 +1,5 @@
 from flask import Flask,flash,render_template,redirect,url_for,jsonify,make_response,request,abort,g,flash
-from helpers import getTwitterFeed,retrieveAllblrTweets,getCheckpoints,doActualWork,getCheckpointLocations
+from helpers import getTwitterFeed,retrieveAllblrTweets,getCheckpoints,insertRouteIntoDb,getCheckpointLocations,getTrafficTweetsForRoute
 import sqlite3
 from contextlib import closing
 
@@ -76,8 +76,8 @@ def blrttweets():
 #				}
 
 
-#Sample API HIT: curl -i -H "Content-Type: application/json" -X POST -d '{"src":"mvit","srclat":"40.81381340000001","srclong":"-74.06693179999999","dest":"hebbal","destlat":"40.8145647","destlong":"-74.06878929999999","day":"thursday","time":"13:32:12"}' http://localhost:5000/api/route
-@app.route("/api/route", methods = ['POST'])
+#Sample API HIT: curl -i -H "Content-Type: application/json" -X POST -d '{"src":"mvit","srclat":"40.81381340000001","srclong":"-74.06693179999999","dest":"hebbal","destlat":"40.8145647","destlong":"-74.06878929999999","day":"thursday","time":"13:32:12"}' http://localhost:5000/api/route/traffic
+@app.route("/api/route/traffic", methods = ['POST'])
 def inputRoute():
     if not request.json:
         abort(400)
@@ -118,11 +118,11 @@ def inputRoute():
     except sqlite3.IntegrityError:
         print "Could not add"
 
-    loc = doActualWork(source,destination,day,time)
+    locations = insertRouteIntoDb(source,destination,day,time)
 
-    
+    trafficTweets = getTrafficTweetsForRoute(locations,day,time)
 
-    return jsonify({"Under":"development","locations":loc}), 201
+    return jsonify({"Under":"development","source":source[2],"destination":destination[2],"tweets":trafficTweets}), 201
 #----------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -156,7 +156,7 @@ def checkpointsLocations():
     json_checkpoints = getCheckpoints(source,destination)
     locations = getCheckpointLocations(source,destination,"","")
 
-    return jsonify({"checkpoints-locations":locations}), 201
+    return jsonify({"source_lat":source[0],"source_long":source[1],"destination_lat":destination[0],"destination_long":destination[1],"checkpoints-locations":locations}), 201
 
 #Sample API HIT: curl -i -H "Content-Type: application/json" -X POST -d '{"srclat":"40.81381340000001","srclong":"-74.06693179999999","destlat":"40.8145647","destlong":"-74.06878929999999"}' http://localhost:5000/api/checkpoints/coordinates
 @app.route("/api/checkpoints/coordinates", methods = ['POST'])
@@ -176,10 +176,9 @@ def checkpointsCoordinates():
     source = [request.json['srclat'],request.json['srclong']]
     destination = [request.json['destlat'],request.json['destlong']]
     
-
     json_checkpoints = getCheckpoints(source,destination)
 
-    return jsonify({"checkpoints-coordinates":json_checkpoints}), 201
+    return jsonify({"source_lat":source[0],"source_long":source[1],"destination_lat":destination[0],"destination_long":destination[1],"checkpoints-coordinates":json_checkpoints}), 201
 
 
 if __name__ == "__main__":

@@ -1,13 +1,19 @@
 # Backend
 Flask server for APIs
 
-1) install requirements:	pip install -r requirements.txt
+1) install requirements:	
+```
+pip install -r requirements.txt
+```
 
 2) git clone the repo
 
-3) run the flask web app: 	cd backend; python main.py;
-
-4) 3) check localhost:		http://localhost:5000 OR http://127.0.0.1:5000
+3) Run the flask web app: 	
+```
+cd backend
+python main.py
+```
+4) Check localhost:		http://localhost:5000 OR http://127.0.0.1:5000
 
 
 

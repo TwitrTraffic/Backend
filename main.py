@@ -1,5 +1,5 @@
 from flask import Flask,flash,render_template,redirect,url_for,jsonify,make_response,request,abort,g,flash
-from helpers import getTwitterFeed,retrieveAllblrTweets,getCheckpoints,insertRouteIntoDb,getCheckpointLocations,getTrafficTweetsForRoute
+from helpers import *
 import sqlite3
 from contextlib import closing
 
@@ -76,9 +76,9 @@ def blrttweets():
 #				}
 
 
-#Sample API HIT: curl -i -H "Content-Type: application/json" -X POST -d '{"src":"mvit","srclat":"40.81381340000001","srclong":"-74.06693179999999","dest":"hebbal","destlat":"40.8145647","destlong":"-74.06878929999999","day":"thursday","time":"13:32:12"}' http://localhost:5000/api/route/traffic
-@app.route("/api/route/traffic", methods = ['POST'])
-def inputRoute():
+#Sample API HIT: curl -i -H "Content-Type: application/json" -X POST -d '{"src":"mvit","srclat":"40.81381340000001","srclong":"-74.06693179999999","dest":"hebbal","destlat":"40.8145647","destlong":"-74.06878929999999","day":"thursday","time":"13:32:12"}' http://localhost:5000/api/route/traffic/now
+@app.route("/api/route/traffic/now", methods = ['POST'])
+def TrafficNow():
     if not request.json:
         abort(400)
     if "src" not in request.json:
@@ -118,9 +118,49 @@ def inputRoute():
     except sqlite3.IntegrityError:
         print "Could not add"
 
-    locations = insertRouteIntoDb(source,destination,day,time)
+    #insertRouteIntoDb(source,destination,day,time)
+    locations = insertRouteIntoDb(source,destination)
 
     trafficTweets = getTrafficTweetsForRoute(locations,day,time)
+
+    return jsonify({"Under":"development","source":source[2],"destination":destination[2],"tweets":trafficTweets}), 201
+#----------------------------------------------------------------------------------------------------------------------------------
+
+
+#Required Json: {
+#				"src":"mvit",
+#				"srclat":"40.81381340000001",
+#				"srclong":"-74.06693179999999",
+#				"dest":"hebbal",
+#				"destlat":"40.8145647",
+#				"destlong":"-74.06878929999999"
+#				}
+
+
+#Sample API HIT: curl -i -H "Content-Type: application/json" -X POST -d '{"src":"mvit","srclat":"40.81381340000001","srclong":"-74.06693179999999","dest":"hebbal","destlat":"40.8145647","destlong":"-74.06878929999999"}' http://localhost:5000/api/route/traffic/alltime
+@app.route("/api/route/traffic/alltime", methods = ['POST'])
+def TrafficAllTime():
+    if not request.json:
+        abort(400)
+    if "src" not in request.json:
+    	abort(400)
+    if "dest" not in request.json:
+    	abort(400)	
+    if "srclat" not in request.json:
+    	abort(400)
+    if "srclong" not in request.json:
+    	abort(400)	
+    if "destlat" not in request.json:
+    	abort(400)
+    if "destlong" not in request.json:
+    	abort(400)	
+    
+    #index '0'->lat ; '1'->long
+    source = [request.json['srclat'],request.json['srclong'],request.json['src']]
+    destination = [request.json['destlat'],request.json['destlong'],request.json['dest']]
+
+    locations = returnLocations(source,destination)
+    trafficTweets = getTrafficTweetsForRouteAllTime(locations)
 
     return jsonify({"Under":"development","source":source[2],"destination":destination[2],"tweets":trafficTweets}), 201
 #----------------------------------------------------------------------------------------------------------------------------------
@@ -154,7 +194,7 @@ def checkpointsLocations():
     
 
     json_checkpoints = getCheckpoints(source,destination)
-    locations = getCheckpointLocations(source,destination,"","")
+    locations = getCheckpointLocations(source,destination)
 
     return jsonify({"source_lat":source[0],"source_long":source[1],"destination_lat":destination[0],"destination_long":destination[1],"checkpoints-locations":locations}), 201
 

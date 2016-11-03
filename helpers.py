@@ -29,7 +29,7 @@ def getTwitterFeed():
     alltweets.extend(new_tweets)
 
     oldest = alltweets[-1].id - 1
-    t = 30
+    t = 20
     while len(new_tweets) > 0 and t > 0:
     #while t > 0:
         t=t-1
@@ -81,7 +81,7 @@ def getCheckpoints(source,destination):
 
 	return json_checkpoints
 
-def getCheckpointLocations(source,destination,day,time):
+def getCheckpointLocations(source,destination):
 	json_checkpoints = getCheckpoints(source,destination)
 
 	json_checkpoint_locations = []
@@ -98,15 +98,17 @@ def getCheckpointLocations(source,destination,day,time):
 
 	return json_checkpoint_locations
 
+def returnLocations(source,destination):
+	location_addr = getCheckpointLocations(source,destination)
+	locations = []
+	loc_comp = []
+	for loc in location_addr:
+		loc_comp = loc.split(',')
+		locations.append(loc_comp[0])
+	return locations
 
-def insertRouteIntoDb(source,destination,day,time):
-    location_addr = getCheckpointLocations(source,destination,day,time)
-
-    locations = []
-    loc_comp = []
-    for loc in location_addr:
-        loc_comp = loc.split(',')
-        locations.append(loc_comp[0])
+def insertRouteIntoDb(source,destination):
+    locations = returnLocations(source,destination)
 
     delim = ","
     locations_string = delim.join(locations)
@@ -114,6 +116,7 @@ def insertRouteIntoDb(source,destination,day,time):
     g.db.execute('insert into places values (?, ?, ?)',[source[2], destination[2], locations_string])
     g.db.commit() 
 
+    #returning only for debugging
     return locations   
 
 
@@ -123,6 +126,20 @@ def getTrafficTweetsForRoute(locations,day,time):
 
     for loction in locations:
         cmd = "select tweet from tweets where tweet like '%" + loction + "%' and Tdate='" + day + "'"
+        cur = g.db.execute(cmd)
+        
+        for row in cur.fetchall():
+            twittrafic.append(row)
+
+
+    return twittrafic
+
+def getTrafficTweetsForRouteAllTime(locations):
+
+    twittrafic = []
+
+    for loction in locations:
+        cmd = "select tweet from tweets where tweet like '%" + loction + "%'"
         cur = g.db.execute(cmd)
         
         for row in cur.fetchall():

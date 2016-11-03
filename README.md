@@ -1,12 +1,12 @@
 # Backend
 Flask server for APIs
 
-1) install requirements:	
+1) Install requirements:	
 ```
 pip install -r requirements.txt
 ```
 
-2) git clone the repo
+2) Clone the repo.
 
 3) Run the flask web app: 	
 ```

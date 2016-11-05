@@ -98,19 +98,10 @@ def getCheckpointLocations(source,destination):
 
 	return json_checkpoint_locations
 
-def returnLocations(source,destination):
-	location_addr = getCheckpointLocations(source,destination)
-	locations = []
-	loc_comp = []
-	for loc in location_addr:
-		loc_comp = loc.split(',')
-		locations.append(loc_comp[0])
-	return locations
-
 def insertRouteIntoDb(source,destination):
-    locations = returnLocations(source,destination)
+    locations = getCheckpointLocations(source,destination)
 
-    delim = ","
+    delim = "|"
     locations_string = delim.join(locations)
 
     g.db.execute('insert into places values (?, ?, ?)',[source[2], destination[2], locations_string])
@@ -122,28 +113,52 @@ def insertRouteIntoDb(source,destination):
 
 def getTrafficTweetsForRoute(locations,day,time):
 
-    twittrafic = []
+    twittraffic = []
 
     for loction in locations:
         cmd = "select tweet from tweets where tweet like '%" + loction + "%' and Tdate='" + day + "'"
         cur = g.db.execute(cmd)
         
         for row in cur.fetchall():
-            twittrafic.append(row)
+            twittraffic.append(row)
 
 
-    return twittrafic
+    return twittraffic
 
 def getTrafficTweetsForRouteAllTime(locations):
 
-    twittrafic = []
+    twittraffic = []
+    time = []
+    date = []
+    places = []
+    final = []
+    for loc in locations:
+        places = places + ((loc.split(",")))
 
-    for loction in locations:
+    places = list(set(places))
+    
+    place = [str(r) for r in places]
+
+    for loction in place:
         cmd = "select tweet from tweets where tweet like '%" + loction + "%'"
+        cmd1 = "select Ttime from tweets where tweet like '%" + loction + "%'"
+        cmd2 = "select Tdate from tweets where tweet like '%" + loction + "%'"
         cur = g.db.execute(cmd)
-        
+        cur1 = g.db.execute(cmd1)
+        cur2 = g.db.execute(cmd2)
         for row in cur.fetchall():
-            twittrafic.append(row)
+            twittraffic.append(str(row))
+        for row in cur1.fetchall():
+            time.append(str(row))
+        for row in cur2.fetchall():
+            date.append(str(row))
+    i = 0
+    while(i<len(twittraffic)):
+        inst = []
+        inst.append(str(twittraffic[i]))
+        inst.append(str(time[i]))
+        inst.append(str(date[i]))
+        i = i + 1
+        final.append(inst)
 
-
-    return twittrafic
+    return final

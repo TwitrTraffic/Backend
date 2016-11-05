@@ -59,10 +59,10 @@ def login():
         destination = [str(request.form['destLat']),str(request.form['destLng']),str(request.form['dest'])]
 
     #index '0'->lat ; '1'->long
-    locations = returnLocations(source,destination)
-    trafficTweets = getTrafficTweetsForRouteAllTime(locations)
+    locations = getCheckpointLocations(source,destination)
+    final = getTrafficTweetsForRouteAllTime(locations)
 
-    return render_template("showRouteTweets.html",tweets=trafficTweets)
+    return render_template("showRouteTweets.html",tweets=final)
 
 
 #---------------------API Section-----------------------------------------------------------------------------------
@@ -170,7 +170,7 @@ def TrafficAllTime():
     source = [request.json['srclat'],request.json['srclong'],request.json['src']]
     destination = [request.json['destlat'],request.json['destlong'],request.json['dest']]
 
-    locations = returnLocations(source,destination)
+    locations = getCheckpointLocations(source,destination)
     trafficTweets = getTrafficTweetsForRouteAllTime(locations)
 
     return jsonify({"Under":"development","source":source[2],"destination":destination[2],"tweets":trafficTweets}), 201

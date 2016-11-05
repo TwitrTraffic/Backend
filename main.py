@@ -55,22 +55,14 @@ def loadDb():
 @app.route("/login", methods = ['POST'])
 def login():
     if request.method == 'POST':
-        src = str(request.form['src'])
-        dest = str(request.form['dest'])
-        srcLat = str(request.form['srcLat'])
-        srcLng = str(request.form['srcLng'])
-        destLat = str(request.form['destLat'])
-        destLng = str(request.form['destLng'])
+        source = [str(request.form['srcLat']),str(request.form['srcLng']),str(request.form['src'])]
+        destination = [str(request.form['destLat']),str(request.form['destLng']),str(request.form['dest'])]
 
-        print src
-        print dest
-        print srcLat
-        print srcLng
-        print destLat
-        print destLng
-        
+    #index '0'->lat ; '1'->long
+    locations = returnLocations(source,destination)
+    trafficTweets = getTrafficTweetsForRouteAllTime(locations)
 
-        return render_template("showRouteTweets.html")
+    return render_template("showRouteTweets.html",tweets=trafficTweets)
 
 
 #---------------------API Section-----------------------------------------------------------------------------------

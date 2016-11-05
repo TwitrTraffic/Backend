@@ -1,9 +1,9 @@
 drop table if exists tweets;
 create table tweets (
-  id integer primary key autoincrement,
+  id text primary key,
   tweet text not null,
   Ttime text not null,
-  Tdate text not null
+  Tdate text not null,
 );
 
 drop table if exists coordinates;

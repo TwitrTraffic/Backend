@@ -52,6 +52,25 @@ def loadDb():
 	getTwitterFeed()
 	return render_template('home.html')
 
+@app.route("/login", methods = ['POST'])
+def login():
+    if request.method == 'POST':
+        src = str(request.form['src'])
+        dest = str(request.form['dest'])
+        srcLat = str(request.form['srcLat'])
+        srcLng = str(request.form['srcLng'])
+        destLat = str(request.form['destLat'])
+        destLng = str(request.form['destLng'])
+
+        print src
+        print dest
+        print srcLat
+        print srcLng
+        print destLat
+        print destLng
+        
+
+        return render_template("showRouteTweets.html")
 
 
 #---------------------API Section-----------------------------------------------------------------------------------

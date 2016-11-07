@@ -35,14 +35,14 @@ Sample Data:
   "dest":"hebbal",
   "destlat":"40.8145647",
   "destlong":"-74.06878929999999",
-  "day":"thursday",
+  "date":"2016-10-25",
   "time":"13:32:12"
 }
 ```
 
 Example:
 ```
-curl -i -H "Content-Type: application/json" -X POST -d '{"src":"mvit","srclat":"40.81381340000001","srclong":"-74.06693179999999","dest":"hebbal","destlat":"40.8145647","destlong":"-74.06878929999999","day":"thursday","time":"13:32:12"}' http://localhost:5000/api/route/traffic/now
+curl -i -H "Content-Type: application/json" -X POST -d '{"src":"mvit","srclat":"40.81381340000001","srclong":"-74.06693179999999","dest":"hebbal","destlat":"40.8145647","destlong":"-74.06878929999999","date":"2016-10-25","time":"13:32:12"}' http://localhost:5000/api/route/traffic/now
 ```
 
 - Retrieve all twitter based traffic based on the route (All time), between source and destination.

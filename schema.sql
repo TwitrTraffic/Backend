@@ -3,7 +3,7 @@ create table tweets (
   id text primary key,
   tweet text not null,
   Ttime text not null,
-  Tdate text not null,
+  Tdate date not null
 );
 
 drop table if exists coordinates;

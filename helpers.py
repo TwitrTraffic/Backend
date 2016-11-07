@@ -140,9 +140,9 @@ def getTrafficTweetsForRouteAllTime(locations):
     place = [str(r) for r in places]
 
     for loction in place:
-        cmd = "select tweet from tweets where tweet like '%" + loction + "%'"
-        cmd1 = "select Ttime from tweets where tweet like '%" + loction + "%'"
-        cmd2 = "select Tdate from tweets where tweet like '%" + loction + "%'"
+        cmd = "select Tdate,tweet from tweets where tweet like '%" + loction + "%' order by date(Tdate) desc"
+        cmd1 = "select Ttime from tweets where tweet like '%" + loction + "%' order by Tdate asc"
+        cmd2 = "select Tdate from tweets where tweet like '%" + loction + "%' order by Tdate asc"
         cur = g.db.execute(cmd)
         cur1 = g.db.execute(cmd1)
         cur2 = g.db.execute(cmd2)
@@ -160,5 +160,4 @@ def getTrafficTweetsForRouteAllTime(locations):
         inst.append(str(date[i]))
         i = i + 1
         final.append(inst)
-
-    return final
+    return twittraffic

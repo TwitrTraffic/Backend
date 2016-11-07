@@ -21,16 +21,18 @@ border-radius: 10px 10px 10px 10px; /* standards-compliant: (IE) */
 		<thead>
 			<tr>
 				<th data-field="tweet">Tweets</th>
-				
+				<th data-field="time">Time</th>
+				<th data-field="date">Date</th>
 			</tr>
 		</thead>
 
 		<tbody>
 		{% for tweet in tweets %}
 			<tr>
-				<td>{{ tweet }}</td>
-				
-			</tr>s
+				<td>{{ tweet[0] }}</td>
+				<td>{{ tweet[1] }}</td>
+				<td>{{ tweet[2] }}</td>
+			</tr>
 		{% endfor %}
 		</tbody>
 	</table>

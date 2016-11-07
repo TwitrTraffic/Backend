@@ -1,20 +1,17 @@
-drop table if exists tweets;
-create table tweets (
+create table if not exists tweets (
   id text primary key,
   tweet text not null,
   Ttime text not null,
   Tdate date not null
 );
 
-drop table if exists coordinates;
-create table coordinates (
+create table if not exists coordinates (
 	location text primary key,
 	lat text not null,
 	long text not null
 );
 
-drop table if exists routes;
-create table routes (
+create table if not exists routes (
 	src text not null,
 	dest text not null,
 	day text not null,
@@ -22,8 +19,7 @@ create table routes (
 	primary key (src, dest) 
 );
 
-drop table if exists places;
-create table places (
+create table if not exists places (
 	src text not null,
 	dest text not null,
 	checkpoints text not null,

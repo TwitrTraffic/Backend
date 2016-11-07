@@ -109,7 +109,7 @@ display: block;
 
 .login1 {
 position: absolute;
-top: 50%;
+top: 20%;
 left: 50%;
 margin: -150px 0 0 -150px;
 width: 300px;
@@ -154,15 +154,19 @@ box-shadow: inset 0 -5px 45px rgba(100, 100, 100, 0.4), 0 1px 1px rgba(255, 255,
 
 <div class="login1">
     <h4 style="color: white;">Twitr Traffic</h4>
-    <form action="/login" , method="POST">
+    <form action="/trafficAllTime" , method="POST">
         <input id="autocomplete" type="text" name="src" placeholder="Source" required="required" />
         <input id="autocomplete2" type="text" name="dest" placeholder="Destination" required="required" />
         <input type="hidden" id="srcLat" name="srcLat" />
         <input type="hidden" id="srcLng" name="srcLng" />
         <input type="hidden" id="destLat" name="destLat" />
         <input type="hidden" id="destLng" name="destLng" /> 
-        <button type="submit" class="btn1 btn-primary1 btn-block1 btn-large1">Check Traffic</button>
-        </form
+        <button type="submit" class="btn1 btn-primary1 btn-block1 btn-large1">Check Traffic All Time</button>
+        <button type="submit" class="btn1 btn-primary1 btn-block1 btn-large1" formaction="/trafficNow" style="margin-top: 5px;">Check Traffic Now</button>
+    </form>
+    <form action="/alltweets" , method="POST">
+       <button type="submit" class="btn1 btn-primary1 btn-block1 btn-large1" style="margin-top: 5px;">All Traffic Tweets</button>
+    </form>
     </div>
 
     <script src="js/index.js"></script>

@@ -1,5 +1,6 @@
 from flask import Flask,flash,render_template,redirect,url_for,jsonify,make_response,request,abort,g,flash
 from helpers import *
+import datetime
 import sqlite3
 from contextlib import closing
 
@@ -52,8 +53,8 @@ def loadDb():
 	getTwitterFeed()
 	return render_template('home.html')
 
-@app.route("/login", methods = ['POST'])
-def login():
+@app.route("/trafficAllTime", methods = ['POST'])
+def trafficAllTime():
     if request.method == 'POST':
         source = [str(request.form['srcLat']),str(request.form['srcLng']),str(request.form['src'])]
         destination = [str(request.form['destLat']),str(request.form['destLng']),str(request.form['dest'])]
@@ -61,6 +62,40 @@ def login():
     #index '0'->lat ; '1'->long
     locations = getCheckpointLocations(source,destination)
     final = getTrafficTweetsForRouteAllTime(locations)
+
+    return render_template("showRouteTweets.html",tweets=final)
+
+
+
+@app.route("/trafficNow", methods = ['POST'])
+def trafficNow():
+    if request.method == 'POST':
+        source = [str(request.form['srcLat']),str(request.form['srcLng']),str(request.form['src'])]
+        destination = [str(request.form['destLat']),str(request.form['destLng']),str(request.form['dest'])]
+
+    now = datetime.datetime.now()
+    print now.strftime("%Y-%m-%d %H:%M")
+
+    date =  now.strftime("%Y-%m-%d")
+    time =  now.strftime("%H:%M:%S")
+    #index '0'->lat ; '1'->long
+    locations = getCheckpointLocations(source,destination)
+    final = getTrafficTweetsForRoute(locations,date,time)
+
+    return render_template("showRouteTweets.html",tweets=final)
+
+
+@app.route("/alltweets", methods = ['POST'])
+def allTweets():
+   
+    final = []
+    cur = g.db.execute('select * from tweets')
+    for row in cur.fetchall():
+        inst = []
+        inst.append(row[1])
+        inst.append(row[2])
+        inst.append(row[3])
+        final.append(inst)
 
     return render_template("showRouteTweets.html",tweets=final)
 

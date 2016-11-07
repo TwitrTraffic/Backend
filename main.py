@@ -89,7 +89,7 @@ def trafficNow():
 def allTweets():
    
     final = []
-    cur = g.db.execute('select * from tweets')
+    cur = g.db.execute('select * from tweets order by Tdate desc')
     for row in cur.fetchall():
         inst = []
         inst.append(row[1])

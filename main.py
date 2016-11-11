@@ -84,8 +84,8 @@ def trafficNow():
 
     return render_template("showRouteTweets.html",tweets=final)
 
-@app.route("/trafficStatusNow", methods = ['POST'])
-def trafficStatusNow():
+@app.route("/trafficStatusAllTime", methods = ['POST'])
+def trafficStatusAllTime():
     if request.method == 'POST':
         source = [str(request.form['srcLat']),str(request.form['srcLng']),str(request.form['src'])]
         destination = [str(request.form['destLat']),str(request.form['destLng']),str(request.form['dest'])]
@@ -96,6 +96,24 @@ def trafficStatusNow():
     final_with_status = getTweetsWithStatus(final)
 
     return render_template("showRouteStatus.html",tweets=final_with_status)
+
+@app.route("/trafficStatusNow", methods = ['POST'])
+def trafficStatusNow():
+    if request.method == 'POST':
+        source = [str(request.form['srcLat']),str(request.form['srcLng']),str(request.form['src'])]
+        destination = [str(request.form['destLat']),str(request.form['destLng']),str(request.form['dest'])]
+
+    now = datetime.datetime.now()
+    print now.strftime("%Y-%m-%d %H:%M")
+
+    date =  now.strftime("%Y-%m-%d")
+    time =  now.strftime("%H:%M:%S")
+    #index '0'->lat ; '1'->long
+    locations = getCheckpointLocations(source,destination)
+    final = getTrafficTweetsForRoute(locations,date,time)
+    final_with_status = getTweetsWithStatus(final)
+
+    return render_template("showRouteTweets.html",tweets=final_with_status)
 
 
 @app.route("/alltweets", methods = ['POST'])

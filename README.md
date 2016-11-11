@@ -3,7 +3,7 @@ Flask server for APIs
 
 1) Install requirements:	
 ```
-pip install -r requirements.txt
+./install.sh
 ```
 
 2) Clone the repo.

@@ -1,8 +1,8 @@
+import datetime,sqlite3
 from flask import Flask,flash,render_template,redirect,url_for,jsonify,make_response,request,abort,g,flash
 from helpers import *
-import datetime
-import sqlite3
 from contextlib import closing
+from classifier import getTweetsWithStatus
 
 
 app = Flask(__name__)
@@ -83,6 +83,19 @@ def trafficNow():
     final = getTrafficTweetsForRoute(locations,date,time)
 
     return render_template("showRouteTweets.html",tweets=final)
+
+@app.route("/trafficStatusNow", methods = ['POST'])
+def trafficStatusNow():
+    if request.method == 'POST':
+        source = [str(request.form['srcLat']),str(request.form['srcLng']),str(request.form['src'])]
+        destination = [str(request.form['destLat']),str(request.form['destLng']),str(request.form['dest'])]
+
+    #index '0'->lat ; '1'->long
+    locations = getCheckpointLocations(source,destination)
+    final = getTrafficTweetsForRouteAllTime(locations)
+    final_with_status = getTweetsWithStatus(final)
+
+    return render_template("showRouteStatus.html",tweets=final_with_status)
 
 
 @app.route("/alltweets", methods = ['POST'])
@@ -209,6 +222,49 @@ def TrafficAllTime():
     trafficTweets = getTrafficTweetsForRouteAllTime(locations)
 
     return jsonify({"Under":"development","source":source[2],"destination":destination[2],"tweets":trafficTweets}), 201
+
+#----------------------------------------------------------------------------------------------------------------------------------
+
+
+#Required Json: {
+#               "src":"mvit",
+#               "srclat":"40.81381340000001",
+#               "srclong":"-74.06693179999999",
+#               "dest":"hebbal",
+#               "destlat":"40.8145647",
+#               "destlong":"-74.06878929999999"
+#               }
+
+
+#Sample API HIT: curl -i -H "Content-Type: application/json" -X POST -d '{"src":"mvit","srclat":"40.81381340000001","srclong":"-74.06693179999999","dest":"hebbal","destlat":"40.8145647","destlong":"-74.06878929999999"}' http://localhost:5000/api/route/status/traffic/alltime
+@app.route("/api/route/status/traffic/alltime", methods = ['POST'])
+def TrafficStatusAllTime():
+    if not request.json:
+        abort(400)
+    if "src" not in request.json:
+        abort(400)
+    if "dest" not in request.json:
+        abort(400)  
+    if "srclat" not in request.json:
+        abort(400)
+    if "srclong" not in request.json:
+        abort(400)  
+    if "destlat" not in request.json:
+        abort(400)
+    if "destlong" not in request.json:
+        abort(400)  
+    
+    #index '0'->lat ; '1'->long
+    source = [request.json['srclat'],request.json['srclong'],request.json['src']]
+    destination = [request.json['destlat'],request.json['destlong'],request.json['dest']]
+
+    locations = getCheckpointLocations(source,destination)
+    trafficTweets = getTrafficTweetsForRouteAllTime(locations)
+    trafficTweetsWithStatus = getTweetsWithStatus(trafficTweets)
+
+    return jsonify({"Under":"development","source":source[2],"destination":destination[2],"tweets":trafficTweetsWithStatus}), 201
+
+
 #----------------------------------------------------------------------------------------------------------------------------------
 
 

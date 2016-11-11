@@ -1,40 +1,17 @@
-{% extends "base.html" %}
+{% extends "showTable.html" %}
 
-{% block style %}
-
-div{
-background: white;
-position: center absolute;
-margin: 50px;
--moz-border-radius: 10px; 
-border-radius: 10px 10px 10px 10px; /* standards-compliant: (IE) */ 
-}
-
-
+{% block thead %} 
+	<th data-field="tweet">Tweets</th>
+	<th data-field="time">Time</th>
+	<th data-field="date">Date</th>
 {% endblock %}
 
-
-
-{% block mainBody %}
-<div>
-	<table class="striped">
-		<thead>
-			<tr>
-				<th data-field="tweet">Tweets</th>
-				<th data-field="time">Time</th>
-				<th data-field="date">Date</th>
-			</tr>
-		</thead>
-
-		<tbody>
-		{% for tweet in tweets %}
-			<tr>
-				<td>{{ tweet[0] }}</td>
-				<td>{{ tweet[1] }}</td>
-				<td>{{ tweet[2] }}</td>
-			</tr>
-		{% endfor %}
-		</tbody>
-	</table>
-</div>     
+{% block tbody %} 
+	{% for tweet in tweets %}
+		<tr>
+			<td>{{ tweet[0] }}</td>
+			<td>{{ tweet[1] }}</td>
+			<td>{{ tweet[2] }}</td>
+		</tr>
+	{% endfor %}
 {% endblock %}

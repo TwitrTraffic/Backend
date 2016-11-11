@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block style %}
+
+div{
+background: white;
+position: center absolute;
+margin: 50px;
+-moz-border-radius: 10px; 
+border-radius: 10px 10px 10px 10px; /* standards-compliant: (IE) */ 
+}
+
+
+{% endblock %}
+
+
+
+{% block mainBody %}
+<div>
+	<table class="striped">
+		<thead>
+			<tr>
+				{% block thead %} {% endblock %}
+			</tr>
+		</thead>
+
+		<tbody>
+		{% block tbody %} {% endblock %}
+		</tbody>
+	</table>
+</div>     
+{% endblock %}

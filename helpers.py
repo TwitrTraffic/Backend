@@ -1,9 +1,7 @@
-import tweepy
+import tweepy,requests,sqlite3
 import json,pprint,re
 from flask import jsonify,abort,g,flash
-import sqlite3
 from contextlib import closing
-import requests
 from urllib2 import urlopen
 from keys import GoogleApiKey,twitter_consumer_key,twitter_consumer_secret,twitter_access_token,twitter_access_token_secret
 

@@ -161,12 +161,14 @@ box-shadow: inset 0 -5px 45px rgba(100, 100, 100, 0.4), 0 1px 1px rgba(255, 255,
         <input type="hidden" id="srcLng" name="srcLng" />
         <input type="hidden" id="destLat" name="destLat" />
         <input type="hidden" id="destLng" name="destLng" /> 
-        <button type="submit" class="btn1 btn-primary1 btn-block1 btn-large1">Check Traffic All Time</button>
-        <button type="submit" class="btn1 btn-primary1 btn-block1 btn-large1" formaction="/trafficNow" style="margin-top: 5px;">Check Traffic Now</button>
+        <button type="submit" class="btn1 btn-primary1 btn-block1 btn-large1">Get Traffic Tweets All Time</button>
+        <button type="submit" class="btn1 btn-primary1 btn-block1 btn-large1" formaction="/trafficNow" style="margin-top: 5px;">Get Traffic Tweets Now</button>
+        <button type="submit" class="btn1 btn-primary1 btn-block1 btn-large1" formaction="/trafficStatusNow" style="margin-top: 5px;">Traffic Severity Now</button>
     </form>
     <form action="/alltweets" , method="POST">
-       <button type="submit" class="btn1 btn-primary1 btn-block1 btn-large1" style="margin-top: 5px;">All Traffic Tweets</button>
+        <button type="submit" class="btn1 btn-primary1 btn-block1 btn-large1" style="margin-top: 5px;">All Traffic Tweets</button>
     </form>
+    
     </div>
 
     <script src="js/index.js"></script>

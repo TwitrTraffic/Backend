@@ -1,0 +1,25 @@
+{% extends "showTable.html" %}
+
+{% block thead %} 
+	<th data-field="tweet">Tweets</th>
+	<th data-field="time">Time</th>
+	<th data-field="date">Date</th>
+	<th data-field="status">Status</th>
+{% endblock %}
+
+{% block tbody %} 
+	{% for tweet in tweets %}
+		<tr>
+			<td >{{ tweet[0] }}</td>
+			<td>{{ tweet[1] }}</td>
+			<td>{{ tweet[2] }}</td>
+			{% if tweet[3] == "Negative" %}
+			<td  style="color: red;">{{ tweet[3] }}</td>
+			{% elif tweet[3] == "Caution" %} 
+			<td  style="color: blue;">{{ tweet[3] }}</td>
+			{% elif tweet[3] == "Positive" %}
+			<td  style="color: green;">{{ tweet[3] }}</td>
+			{% endif%}
+		</tr>
+	{% endfor %}
+{% endblock %}

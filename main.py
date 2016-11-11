@@ -264,7 +264,70 @@ def TrafficStatusAllTime():
 
     return jsonify({"Under":"development","source":source[2],"destination":destination[2],"tweets":trafficTweetsWithStatus}), 201
 
+#----------------------------------------------------------------------------------------------------------------------------------
 
+
+#Required Json: {
+#               "src":"mvit",
+#               "srclat":"40.81381340000001",
+#               "srclong":"-74.06693179999999",
+#               "dest":"hebbal",
+#               "destlat":"40.8145647",
+#               "destlong":"-74.06878929999999",
+#               "date":"2016-10-25",
+#               "time":"13:32:12"
+#               }
+
+
+#Sample API HIT: curl -i -H "Content-Type: application/json" -X POST -d '{"src":"mvit","srclat":"40.81381340000001","srclong":"-74.06693179999999","dest":"hebbal","destlat":"40.8145647","destlong":"-74.06878929999999","date":"2016-10-25","time":"13:32:12"}' http://localhost:5000/api/route/status/traffic/now
+@app.route("/api/route/status/traffic/now", methods = ['POST'])
+def TrafficStatusNow():
+    if not request.json:
+        abort(400)
+    if "src" not in request.json:
+        abort(400)
+    if "dest" not in request.json:
+        abort(400)  
+    if "srclat" not in request.json:
+        abort(400)
+    if "srclong" not in request.json:
+        abort(400)  
+    if "destlat" not in request.json:
+        abort(400)
+    if "destlong" not in request.json:
+        abort(400)  
+    if "date" not in request.json:
+        abort(400)
+    if "time" not in request.json:
+        abort(400)  
+    
+    #index '0'->lat ; '1'->long
+    source = [request.json['srclat'],request.json['srclong'],request.json['src']]
+    destination = [request.json['destlat'],request.json['destlong'],request.json['dest']]
+    date = request.json['date']
+    time = request.json['time']
+
+    try:
+
+        g.db.execute('insert into routes values (?, ?, ?, ?)',[source[2], destination[2], date, time])
+        g.db.commit()
+
+        g.db.execute('insert into coordinates values (?, ?, ?)',[source[2], source[0], source[1]])
+        g.db.commit()
+
+        g.db.execute('insert into coordinates values (?, ?, ?)',[destination[2], destination[0], destination[1]])
+        g.db.commit()
+
+    except sqlite3.IntegrityError:
+        print "Could not add"
+
+    #insertRouteIntoDb(source,destination,day,time)
+    locations = insertRouteIntoDb(source,destination)
+
+    trafficTweets = getTrafficTweetsForRoute(locations,date,time)
+    trafficStatusNow = getTweetsWithStatus(trafficTweets)
+
+    return jsonify({"Under":"development","source":source[2],"destination":destination[2],"tweets":trafficStatusNow}), 201
 #----------------------------------------------------------------------------------------------------------------------------------
 
 

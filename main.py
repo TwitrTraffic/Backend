@@ -199,8 +199,15 @@ def TrafficNow():
     locations = insertRouteIntoDb(source,destination)
 
     trafficTweets = getTrafficTweetsForRoute(locations,date,time)
+    Tweets = []
+    for tt in trafficTweets:
+        d = {}
+        d['tweet']=tt[0]
+        d['time']=tt[1]
+        d['date']=tt[2]
+        Tweets.append(d)
 
-    return jsonify({"Under":"development","source":source[2],"destination":destination[2],"tweets":trafficTweets}), 201
+    return jsonify({"source":source[2],"destination":destination[2],"tweets":Tweets}), 201
 #----------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -238,8 +245,15 @@ def TrafficAllTime():
 
     locations = getCheckpointLocations(source,destination)
     trafficTweets = getTrafficTweetsForRouteAllTime(locations)
+    Tweets = []
+    for tt in trafficTweets:
+        d = {}
+        d['tweet']=tt[0]
+        d['time']=tt[1]
+        d['date']=tt[2]
+        Tweets.append(d)
 
-    return jsonify({"Under":"development","source":source[2],"destination":destination[2],"tweets":trafficTweets}), 201
+    return jsonify({"source":source[2],"destination":destination[2],"tweets":Tweets}), 201
 
 #----------------------------------------------------------------------------------------------------------------------------------
 
@@ -279,8 +293,16 @@ def TrafficStatusAllTime():
     locations = getCheckpointLocations(source,destination)
     trafficTweets = getTrafficTweetsForRouteAllTime(locations)
     trafficTweetsWithStatus = getTweetsWithStatus(trafficTweets)
+    Tweets = []
+    for tt in trafficTweetsWithStatus:
+        d = {}
+        d['tweet']=tt[0]
+        d['time']=tt[1]
+        d['date']=tt[2]
+        d['status']=tt[3]
+        Tweets.append(d)
 
-    return jsonify({"Under":"development","source":source[2],"destination":destination[2],"tweets":trafficTweetsWithStatus}), 201
+    return jsonify({"source":source[2],"destination":destination[2],"tweets":Tweets}), 201
 
 #----------------------------------------------------------------------------------------------------------------------------------
 
@@ -339,13 +361,21 @@ def TrafficStatusNow():
     except sqlite3.IntegrityError:
         print "Could not add"
 
-    #insertRouteIntoDb(source,destination,day,time)
-    locations = insertRouteIntoDb(source,destination)
+    locations = getCheckpointLocations(source,destination)
+    insertRouteIntoDb(source,destination,locations)
 
     trafficTweets = getTrafficTweetsForRoute(locations,date,time)
     trafficStatusNow = getTweetsWithStatus(trafficTweets)
+    Tweets = []
+    for tt in trafficStatusNow:
+        d = {}
+        d['tweet']=tt[0]
+        d['time']=tt[1]
+        d['date']=tt[2]
+        d['status']=tt[3]
+        Tweets.append(d)
 
-    return jsonify({"Under":"development","source":source[2],"destination":destination[2],"tweets":trafficStatusNow}), 201
+    return jsonify({"Under":"development","source":source[2],"destination":destination[2],"tweets":Tweets}), 201
 #----------------------------------------------------------------------------------------------------------------------------------
 
 

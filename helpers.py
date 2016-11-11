@@ -96,17 +96,12 @@ def getCheckpointLocations(source,destination):
 
 	return json_checkpoint_locations
 
-def insertRouteIntoDb(source,destination):
-    locations = getCheckpointLocations(source,destination)
-
+def insertRouteIntoDb(source,destination,locations):
     delim = "|"
     locations_string = delim.join(locations)
 
     g.db.execute('insert into places values (?, ?, ?)',[source[2], destination[2], locations_string])
-    g.db.commit() 
-
-    #returning only for debugging
-    return locations   
+    g.db.commit()   
 
 
 def getTrafficTweetsForRoute(locations,date,time):

@@ -109,10 +109,26 @@ display: block;
 
 .login1 {
 position: absolute;
-top: 20%;
+top: 40%;
 left: 50%;
 margin: -150px 0 0 -150px;
 width: 300px;
+height: 300px;
+}
+
+.clean{
+position: absolute;
+top: 5%;
+left: 80%;
+width: 200px;
+height: 300px;
+}
+
+.flash{
+position: absolute;
+top: 15%;
+left: 75%;
+width: 500px;
 height: 300px;
 }
 
@@ -151,6 +167,23 @@ box-shadow: inset 0 -5px 45px rgba(100, 100, 100, 0.4), 0 1px 1px rgba(255, 255,
 
 
 {% block mainBody %} 
+<div class="clean">
+    <form action="/trafficAllTime" , method="POST">
+        <button type="submit" class="btn1 btn-primary1 btn-block1 btn-large1" formaction="/cleanSlate" style="margin: 5px; float:right;">Clear Database</button>
+        <button type="submit" class="btn1 btn-primary1 btn-block1 btn-large1" formaction="/load" style="margin: 5px; float:right;">Load Database</button>
+    </form>
+</div>
+<div class="flash">
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul class="flashes">
+            {% for message in messages %}
+            <span class="message_flash" style="color:white;">{{ message }}</span>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    {% endwith %}
+</div>
 
 <div class="login1">
     <h4 style="color: white;">Twitr Traffic</h4>

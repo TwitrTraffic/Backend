@@ -151,6 +151,29 @@ def allTweets():
 
     return render_template("showRouteTweets.html",tweets=final)
 
+@app.route("/cleanSlate", methods = ['POST'])
+def cleanSlate():
+	
+	cur = g.db.execute('drop table tweets;')
+	g.db.commit()
+
+	cur = g.db.execute('drop table coordinates;')
+	g.db.commit()
+
+	cur = g.db.execute('drop table routes;')
+	g.db.commit()
+
+	cur = g.db.execute('drop table places;')
+	g.db.commit()
+	
+	flash('* Please Load the Database for features to work')
+	return redirect(url_for('mainInit'))
+
+@app.route("/load", methods = ['POST'])
+def load():
+	flash('* Loading')
+	return redirect(url_for('loadDb'))
+
 
 #---------------------API Section-----------------------------------------------------------------------------------
 

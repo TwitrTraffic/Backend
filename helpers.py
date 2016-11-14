@@ -48,7 +48,7 @@ def getTwitterFeed():
                     g.db.commit()
                 except sqlite3.IntegrityError:
                     print "Could not add"
-
+ 
     new_tweets = api.user_timeline('blrcitypolice',count=200)
     alltweets.extend(new_tweets)
 

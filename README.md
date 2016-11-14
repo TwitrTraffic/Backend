@@ -18,7 +18,7 @@ python main.py
 
 - To initially load your database:
 ```
-curl -i http://localhost:5000/api/blrttweets
+curl -i http://localhost:5000/loadDb
 ```
 
 ---------

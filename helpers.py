@@ -48,6 +48,32 @@ def getTwitterFeed():
                     g.db.commit()
                 except sqlite3.IntegrityError:
                     print "Could not add"
+
+    new_tweets = api.user_timeline('blrcitypolice',count=200)
+    alltweets.extend(new_tweets)
+
+    oldest = alltweets[-1].id - 1
+    
+    while len(new_tweets) > 0 :
+    #while t > 0:
+        
+        new_tweets = api.user_timeline('blrcitypolice',count=200,max_id=oldest)
+        
+        alltweets.extend(new_tweets)
+        
+        oldest = alltweets[-1].id - 1
+
+    
+    for tweet in alltweets:
+        if not tweet.retweeted and 'RT @' not in tweet.text:
+            if '@' not in tweet.text: 
+                #print "{}: {} -> {}".format(tweet.id,tweet.created_at,re.sub(r'[^\x00-\x7F]+',' ', tweet.text))
+                dateTime = str(tweet.created_at).split()
+                try:
+                    g.db.execute('insert into tweets values (?, ?, ?, ?)',[tweet.id, str(re.sub(r'[^\x00-\x7F]+',' ', tweet.text)), dateTime[1], dateTime[0]])
+                    g.db.commit()
+                except sqlite3.IntegrityError:
+                    print "Could not add"
                 
    
 

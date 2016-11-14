@@ -12,6 +12,7 @@ app.secret_key = 'aBcDeFg1@3$5'
 # configuration
 DATABASE = '/tmp/tt.db'
 DEBUG = True
+#DEBUG = False
 SECRET_KEY = 'development key'
 USERNAME = 'admin'
 PASSWORD = 'default'
@@ -114,6 +115,26 @@ def trafficStatusNow():
     final_with_status = getTweetsWithStatus(final)
 
     return render_template("showRouteTweets.html",tweets=final_with_status)
+
+@app.route("/routeLoc", methods = ['POST'])
+def routeLoc():
+    if request.method == 'POST':
+        source = [str(request.form['srcLat']),str(request.form['srcLng']),str(request.form['src'])]
+        destination = [str(request.form['destLat']),str(request.form['destLng']),str(request.form['dest'])]
+
+    #index '0'->lat ; '1'->long
+    json_checkpoints = getCheckpoints(source,destination)
+    locations = getCheckpointLocations(source,destination)
+    coordinates = []
+    for (j,l) in zip(json_checkpoints,locations):
+        inst = []
+        inst.append(l)
+        inst.append(j['lat'])
+        inst.append(j['lng'])
+        coordinates.append(inst)
+    print coordinates
+
+    return render_template("showRouteLoc.html",coordinates=coordinates)
 
 
 @app.route("/alltweets", methods = ['POST'])
@@ -405,8 +426,6 @@ def checkpointsLocations():
     source = [request.json['srclat'],request.json['srclong']]
     destination = [request.json['destlat'],request.json['destlong']]
     
-
-    json_checkpoints = getCheckpoints(source,destination)
     locations = getCheckpointLocations(source,destination)
 
     return jsonify({"source_lat":source[0],"source_long":source[1],"destination_lat":destination[0],"destination_long":destination[1],"checkpoints-locations":locations}), 201
@@ -435,4 +454,4 @@ def checkpointsCoordinates():
 
 
 if __name__ == "__main__":
-    app.run(debug = True)
+    app.run(debug = DEBUG)

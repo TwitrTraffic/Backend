@@ -1,0 +1,17 @@
+{% extends "showTable.html" %}
+
+{% block thead %} 
+	<th data-field="location">Location</th>
+	<th data-field="latitude">Latitude</th>
+	<th data-field="longitude">Longitude</th>
+{% endblock %}
+
+{% block tbody %} 
+	{% for loc in coordinates %}
+		<tr>
+			<td>{{ loc[0] }}</td>
+			<td>{{ loc[1] }}</td>
+			<td>{{ loc[2] }}</td>
+		</tr>
+	{% endfor %}
+{% endblock %}

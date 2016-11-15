@@ -23,11 +23,11 @@ def getTwitterFeed():
     
     alltweets = []
 
-    new_tweets = api.user_timeline('blrcitytraffic',count=200)
+    new_tweets = api.user_timeline('blrcitytraffic',count=50)
     alltweets.extend(new_tweets)
 
     oldest = alltweets[-1].id - 1
-    
+    '''
     while len(new_tweets) > 0 :
     #while t > 0:
         
@@ -37,7 +37,7 @@ def getTwitterFeed():
         
         oldest = alltweets[-1].id - 1
 
-    
+    '''
     for tweet in alltweets:
         if not tweet.retweeted and 'RT @' not in tweet.text:
             if '@' not in tweet.text: 
@@ -49,11 +49,11 @@ def getTwitterFeed():
                 except sqlite3.IntegrityError:
                     print "Could not add"
  
-    new_tweets = api.user_timeline('blrcitypolice',count=200)
+    new_tweets = api.user_timeline('blrcitypolice',count=50)
     alltweets.extend(new_tweets)
 
     oldest = alltweets[-1].id - 1
-    
+    '''
     while len(new_tweets) > 0 :
     #while t > 0:
         
@@ -63,7 +63,7 @@ def getTwitterFeed():
         
         oldest = alltweets[-1].id - 1
 
-    
+    '''
     for tweet in alltweets:
         if not tweet.retweeted and 'RT @' not in tweet.text:
             if '@' not in tweet.text: 
@@ -123,10 +123,10 @@ def getCheckpointLocations(source,destination):
 	return json_checkpoint_locations
 
 def insertRouteIntoDb(source,destination,locations):
-    delim = "|"
+    delim = " | "
     locations_string = delim.join(locations)
 
-    g.db.execute('insert into places values (?, ?, ?)',[source[2], destination[2], locations_string])
+    g.db.execute('insert into places values (?, ?, ?)',[source, destination, locations_string])
     g.db.commit()   
 
 

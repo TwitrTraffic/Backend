@@ -1,8 +1,9 @@
 import datetime,sqlite3
-from flask import Flask,flash,render_template,redirect,url_for,jsonify,make_response,request,abort,g,flash
+from flask import Flask,flash,render_template,redirect,url_for,jsonify,make_response,request,abort,g,flash,send_file
 from helpers import *
 from contextlib import closing
 from classifier import getTweetsWithStatus
+from report import exportLocations,exportTweets
 
 
 app = Flask(__name__)
@@ -52,7 +53,7 @@ def mainInit():
 def loadDb():
 	init_db()
 	getTwitterFeed()
-	return render_template('home.html')
+	return redirect(url_for('mainInit'))
 
 @app.route("/trafficAllTime", methods = ['POST'])
 def trafficAllTime():
@@ -63,6 +64,7 @@ def trafficAllTime():
     #index '0'->lat ; '1'->long
     locations = getCheckpointLocations(source,destination)
     final = getTrafficTweetsForRouteAllTime(locations)
+    insertRouteIntoDb(source[2],destination[2],locations)
 
     return render_template("showRouteTweets.html",tweets=final)
 
@@ -82,6 +84,7 @@ def trafficNow():
     #index '0'->lat ; '1'->long
     locations = getCheckpointLocations(source,destination)
     final = getTrafficTweetsForRoute(locations,date,time)
+    insertRouteIntoDb(source[2],destination[2],locations)
 
     return render_template("showRouteTweets.html",tweets=final)
 
@@ -95,6 +98,7 @@ def trafficStatusAllTime():
     locations = getCheckpointLocations(source,destination)
     final = getTrafficTweetsForRouteAllTime(locations)
     final_with_status = getTweetsWithStatus(final)
+    insertRouteIntoDb(source[2],destination[2],locations)
 
     return render_template("showRouteStatus.html",tweets=final_with_status)
 
@@ -113,6 +117,7 @@ def trafficStatusNow():
     locations = getCheckpointLocations(source,destination)
     final = getTrafficTweetsForRoute(locations,date,time)
     final_with_status = getTweetsWithStatus(final)
+    insertRouteIntoDb(source[2],destination[2],locations)
 
     return render_template("showRouteTweets.html",tweets=final_with_status)
 
@@ -133,6 +138,7 @@ def routeLoc():
         inst.append(j['lng'])
         coordinates.append(inst)
     print coordinates
+    insertRouteIntoDb(source[2],destination[2],locations)
 
     return render_template("showRouteLoc.html",coordinates=coordinates)
 
@@ -171,8 +177,23 @@ def cleanSlate():
 
 @app.route("/load", methods = ['POST'])
 def load():
-	flash('* Loading')
 	return redirect(url_for('loadDb'))
+
+@app.route("/dlRoute", methods = ['GET'])
+def dlRoute():
+	exportLocations()
+	return send_file('reports/locations.csv',
+                    mimetype='text/csv',
+                    attachment_filename='Routes.csv',
+                    as_attachment=True)
+
+@app.route("/dlTweets", methods = ['GET'])
+def dlTweets():
+	exportTweets()
+	return send_file('reports/tweets.csv',
+                     mimetype='text/csv',
+                     attachment_filename='All-Tweets.csv',
+                     as_attachment=True)
 
 
 #---------------------API Section-----------------------------------------------------------------------------------
@@ -239,8 +260,7 @@ def TrafficNow():
     except sqlite3.IntegrityError:
         print "Could not add"
 
-    #insertRouteIntoDb(source,destination,day,time)
-    locations = insertRouteIntoDb(source,destination)
+    insertRouteIntoDb(source[2],destination[2],locations)
 
     trafficTweets = getTrafficTweetsForRoute(locations,date,time)
     Tweets = []
@@ -286,7 +306,8 @@ def TrafficAllTime():
     #index '0'->lat ; '1'->long
     source = [request.json['srclat'],request.json['srclong'],request.json['src']]
     destination = [request.json['destlat'],request.json['destlong'],request.json['dest']]
-
+    insertRouteIntoDb(source[2],destination[2],locations)
+    
     locations = getCheckpointLocations(source,destination)
     trafficTweets = getTrafficTweetsForRouteAllTime(locations)
     Tweets = []
@@ -333,7 +354,7 @@ def TrafficStatusAllTime():
     #index '0'->lat ; '1'->long
     source = [request.json['srclat'],request.json['srclong'],request.json['src']]
     destination = [request.json['destlat'],request.json['destlong'],request.json['dest']]
-
+    insertRouteIntoDb(source[2],destination[2],locations)
     locations = getCheckpointLocations(source,destination)
     trafficTweets = getTrafficTweetsForRouteAllTime(locations)
     trafficTweetsWithStatus = getTweetsWithStatus(trafficTweets)
@@ -406,8 +427,7 @@ def TrafficStatusNow():
         print "Could not add"
 
     locations = getCheckpointLocations(source,destination)
-    insertRouteIntoDb(source,destination,locations)
-
+    insertRouteIntoDb(source[2],destination[2],locations)
     trafficTweets = getTrafficTweetsForRoute(locations,date,time)
     trafficStatusNow = getTweetsWithStatus(trafficTweets)
     Tweets = []
@@ -448,10 +468,19 @@ def checkpointsLocations():
     #index '0'->lat ; '1'->long
     source = [request.json['srclat'],request.json['srclong']]
     destination = [request.json['destlat'],request.json['destlong']]
-    
+    insertRouteIntoDb(source[2],destination[2],locations)
     locations = getCheckpointLocations(source,destination)
 
     return jsonify({"source_lat":source[0],"source_long":source[1],"destination_lat":destination[0],"destination_long":destination[1],"checkpoints-locations":locations}), 201
+#----------------------------------------------------------------------------------------------------------------------------------
+
+
+#Required Json: {
+#				"srclat":"40.81381340000001",
+#				"srclong":"-74.06693179999999",
+#				"destlat":"40.8145647",
+#				"destlong":"-74.06878929999999",
+#				}
 
 #Sample API HIT: curl -i -H "Content-Type: application/json" -X POST -d '{"srclat":"40.81381340000001","srclong":"-74.06693179999999","destlat":"40.8145647","destlong":"-74.06878929999999"}' http://localhost:5000/api/checkpoints/coordinates
 @app.route("/api/checkpoints/coordinates", methods = ['POST'])
@@ -470,7 +499,7 @@ def checkpointsCoordinates():
     #index '0'->lat ; '1'->long
     source = [request.json['srclat'],request.json['srclong']]
     destination = [request.json['destlat'],request.json['destlong']]
-    
+    insertRouteIntoDb(source[2],destination[2],locations)
     json_checkpoints = getCheckpoints(source,destination)
 
     return jsonify({"source_lat":source[0],"source_long":source[1],"destination_lat":destination[0],"destination_long":destination[1],"checkpoints-coordinates":json_checkpoints}), 201

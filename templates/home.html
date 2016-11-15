@@ -127,8 +127,16 @@ height: 300px;
 .flash{
 position: absolute;
 top: 15%;
-left: 75%;
+left: 35%;
 width: 500px;
+height: 300px;
+}
+
+.footer{
+position: absolute;
+top: 90%;
+left: 5%;
+width: 300px;
 height: 300px;
 }
 
@@ -169,8 +177,12 @@ box-shadow: inset 0 -5px 45px rgba(100, 100, 100, 0.4), 0 1px 1px rgba(255, 255,
 {% block mainBody %} 
 <div class="clean">
     <form action="/trafficAllTime" , method="POST">
-        <button type="submit" class="btn1 btn-primary1 btn-block1 btn-large1" formaction="/cleanSlate" style="margin: 5px; float:right;">Clear Database</button>
-        <button type="submit" class="btn1 btn-primary1 btn-block1 btn-large1" formaction="/load" style="margin: 5px; float:right;">Load Database</button>
+        <button type="submit" class="btn1 btn-primary1 btn-block1 btn-large1" formaction="/cleanSlate" style="margin: 5px;">Clear Database</button>
+        <button type="submit" class="btn1 btn-primary1 btn-block1 btn-large1" formaction="/load" style="margin: 5px;">Load Database</button>
+    </form>
+    <form action="/trafficAllTime" , method="GET">
+        <button type="submit" class="btn1 btn-primary1 btn-block1 btn-large1" formaction="/dlRoute" style="margin: 5px;">Download All Routes as CSV</button>
+        <button type="submit" class="btn1 btn-primary1 btn-block1 btn-large1" formaction="/dlTweets" style="margin: 5px;">Download All Tweets as CSV</button>
     </form>
 </div>
 <div class="flash">

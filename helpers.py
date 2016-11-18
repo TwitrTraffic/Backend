@@ -157,6 +157,7 @@ def getTrafficTweetsForRoute(locations,date,time):
 
     return twittraffic
 
+
 def getTrafficTweetsForRouteAllTime(locations):
 
     twittraffic = []

@@ -1,5 +1,39 @@
 {% extends "showTable.html" %}
 
+{% block donut %} 
+<script type="text/javascript">
+		window.onload = function () {
+			var chart = new CanvasJS.Chart("chartContainer", {
+				animationEnabled: true,
+				theme: "theme2",
+				data: [
+				{
+					type: "doughnut",
+					indexLabelFontFamily: "Garamond",
+					indexLabelFontSize: 20,
+					startAngle: 0,
+					indexLabelFontColor: "dimgrey",
+					indexLabelLineColor: "darkgrey",
+					toolTipContent: "{y} %",
+
+					dataPoints: [
+					{ y: {{ tweets[0][0] }}, indexLabel: "Positive {y}%" },
+					{ y: {{ tweets[0][2] }}, indexLabel: "Negative {y}%" },
+					{ y: {{ tweets[0][1] }}, indexLabel: "Neutral {y}%" }
+					]
+				}
+				]
+			});
+
+			chart.render();
+		}
+	</script>
+	<script src="/static/js/canvasjs.min.js"></script>
+<div id="chartContainer" style="height: 300px; width: 80%;margin-left:90px;float: left;">
+</div>
+
+{% endblock %}
+
 {% block thead %} 
 	<th data-field="tweet">Tweets</th>
 	<th data-field="time">Time</th>
@@ -8,9 +42,9 @@
 {% endblock %}
 
 {% block tbody %} 
-	{% for tweet in tweets %}
+	{% for tweet in tweets[1:] %}
 		<tr>
-			<td >{{ tweet[0] }}</td>
+			<td>{{ tweet[0] }}</td>
 			<td>{{ tweet[1] }}</td>
 			<td>{{ tweet[2] }}</td>
 			{% if tweet[3] == "Negative" %}

@@ -3,15 +3,15 @@ from textblob.classifiers import NaiveBayesClassifier
 
 train = [
 		('Slow Moving traffic', 'neg'),
-		('Peak hour traffic', 'neg'),
 		('On going protest', 'neg'),
+		('Vehicles not allowed', 'neg'),
 		('Slow traffic', 'neg'),
 		('bus breakdown', 'neg'),
 		('expect traffic holdup', 'neg'),
 		('more rush', 'neg'),
 		('Traffic is restored', 'pos'),
 		('traffic cleared', 'pos'),
-		('Vehicles not allowed', 'neu'),
+		('Peak hour traffic', 'neu'),
 		(' Routes to avoid', 'neu'),
 		('Traffic at', 'neu')
 	]
@@ -20,11 +20,12 @@ train = [
 cl = NaiveBayesClassifier(train)
 
 def classify(tweet):
-	print cl.classify(tweet)
 	return cl.classify(tweet)
 
 def getTweetsWithStatus(final):
-	finalWithStatus = []
+	finalWithStatus = [] 
+
+	neg = neu = pos = total = 0
 	for tweet in final:
 		inst = []
 		inst.append(tweet[0])
@@ -32,9 +33,24 @@ def getTweetsWithStatus(final):
 		inst.append(tweet[2])
 		if classify(tweet[0])=="neg":
 			inst.append("Negative")
+			neg = neg + 1
 		elif classify(tweet[0])=="pos":
 			inst.append("Positive")
+			pos = pos + 1
 		elif classify(tweet[0])=="neu":
 			inst.append("Caution")
+			neu = neu + 1
 		finalWithStatus.append(inst)
-	return finalWithStatus
+
+	new_list = []
+	temp = []
+	inst = []
+	total = neu + neg + pos
+	print (float(pos)/total)*100,(float(neu)/total)*100
+	inst.append((float(pos)/total)*100)
+	inst.append((float(neu)/total)*100)
+	inst.append((float(neg)/total)*100)
+	temp.append(inst)
+	new_list = temp + finalWithStatus
+
+	return new_list

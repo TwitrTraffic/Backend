@@ -46,7 +46,7 @@ def getTweetsWithStatus(final):
 	temp = []
 	inst = []
 	total = neu + neg + pos
-	print (float(pos)/total)*100,(float(neu)/total)*100
+	
 	inst.append((float(pos)/total)*100)
 	inst.append((float(neu)/total)*100)
 	inst.append((float(neg)/total)*100)

@@ -65,6 +65,31 @@ def trafficAllTime():
     locations = getCheckpointLocations(source,destination)
     final = getTrafficTweetsForRouteAllTime(locations)
     insertRouteIntoDb(source[2],destination[2],locations)
+     #index '0'->lat ; '1'->long
+    source = [request.json['srclat'],request.json['srclong'],request.json['src']]
+    destination = [request.json['destlat'],request.json['destlong'],request.json['dest']]
+    now = datetime.datetime.now()
+    
+
+    date =  now.strftime("%Y-%m-%d")
+    time =  now.strftime("%H:%M:%S")
+
+    try:
+
+        g.db.execute('insert into routes values (?, ?, ?, ?)',[source[2], destination[2], date, time])
+        g.db.commit()
+
+        g.db.execute('insert into coordinates values (?, ?, ?)',[source[2], source[0], source[1]])
+        g.db.commit()
+
+        g.db.execute('insert into coordinates values (?, ?, ?)',[destination[2], destination[0], destination[1]])
+        g.db.commit()
+
+    except sqlite3.IntegrityError:
+        print "Could not add"
+
+    insertRouteIntoDb(source[2],destination[2],locations)
+
 
     return render_template("showRouteTweets.html",tweets=final)
 
@@ -81,6 +106,20 @@ def trafficNow():
 
     date =  now.strftime("%Y-%m-%d")
     time =  now.strftime("%H:%M:%S")
+
+	 try:
+
+	    g.db.execute('insert into routes values (?, ?, ?, ?)',[source[2], destination[2], date, time])
+	    g.db.commit()
+
+	    g.db.execute('insert into coordinates values (?, ?, ?)',[source[2], source[0], source[1]])
+	    g.db.commit()
+
+	    g.db.execute('insert into coordinates values (?, ?, ?)',[destination[2], destination[0], destination[1]])
+	    g.db.commit()
+
+    except sqlite3.IntegrityError:
+        print "Could not add"
     #index '0'->lat ; '1'->long
     locations = getCheckpointLocations(source,destination)
     final = getTrafficTweetsForRoute(locations,date,time)
@@ -98,6 +137,26 @@ def trafficStatusAllTime():
     locations = getCheckpointLocations(source,destination)
     final = getTrafficTweetsForRouteAllTime(locations)
     final_with_status = getTweetsWithStatus(final)
+    now = datetime.datetime.now()
+    
+
+    date =  now.strftime("%Y-%m-%d")
+    time =  now.strftime("%H:%M:%S")
+
+    try:
+
+        g.db.execute('insert into routes values (?, ?, ?, ?)',[source[2], destination[2], date, time])
+        g.db.commit()
+
+        g.db.execute('insert into coordinates values (?, ?, ?)',[source[2], source[0], source[1]])
+        g.db.commit()
+
+        g.db.execute('insert into coordinates values (?, ?, ?)',[destination[2], destination[0], destination[1]])
+        g.db.commit()
+
+    except sqlite3.IntegrityError:
+        print "Could not add"
+
     insertRouteIntoDb(source[2],destination[2],locations)
 
     return render_template("showRouteStatus.html",tweets=final_with_status)
@@ -113,6 +172,21 @@ def trafficStatusNow():
 
     date =  now.strftime("%Y-%m-%d")
     time =  now.strftime("%H:%M:%S")
+
+    try:
+
+        g.db.execute('insert into routes values (?, ?, ?, ?)',[source[2], destination[2], date, time])
+        g.db.commit()
+
+        g.db.execute('insert into coordinates values (?, ?, ?)',[source[2], source[0], source[1]])
+        g.db.commit()
+
+        g.db.execute('insert into coordinates values (?, ?, ?)',[destination[2], destination[0], destination[1]])
+        g.db.commit()
+
+    except sqlite3.IntegrityError:
+        print "Could not add"
+
     #index '0'->lat ; '1'->long
     locations = getCheckpointLocations(source,destination)
     final = getTrafficTweetsForRoute(locations,date,time)

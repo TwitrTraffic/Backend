@@ -106,8 +106,7 @@ def trafficNow():
 
     date =  now.strftime("%Y-%m-%d")
     time =  now.strftime("%H:%M:%S")
-
-	 try:
+    try:
 
 	    g.db.execute('insert into routes values (?, ?, ?, ?)',[source[2], destination[2], date, time])
 	    g.db.commit()

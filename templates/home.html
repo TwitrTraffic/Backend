@@ -119,8 +119,7 @@ height: 300px;
 .clean{
 position: absolute;
 top: 5%;
-left: 80%;
-width: 200px;
+width: 250px;
 height: 300px;
 }
 
@@ -132,12 +131,31 @@ width: 500px;
 height: 300px;
 }
 
+.sidebut{
+position: absolute;
+top: 30%;
+left: 65%;
+height: 300px;
+width: 300px;
+}
+
 .footer{
 position: absolute;
-top: 90%;
+top: 87%;
 left: 5%;
-width: 300px;
 height: 300px;
+}
+
+.fhr{
+position: absolute;
+top: 95%; 
+width:99%;
+}
+
+.image{
+position: absolute;
+left: 5%;  
+top: 15%;
 }
 
 .login1 {
@@ -145,6 +163,7 @@ color: #fff;
 text-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 letter-spacing: 1px;
 text-align: center;
+left:40%
 }
 
 input {
@@ -175,16 +194,28 @@ box-shadow: inset 0 -5px 45px rgba(100, 100, 100, 0.4), 0 1px 1px rgba(255, 255,
 
 
 {% block mainBody %} 
-<div class="clean">
+<div class="clean footer">
     <form action="/trafficAllTime" , method="POST">
         <button type="submit" class="btn1 btn-primary1 btn-block1 btn-large1" formaction="/cleanSlate" style="margin: 5px;">Clear Database</button>
+    </form>
+</div>
+<div class="clean footer" style="left:27%">
+    <form action="/trafficAllTime" , method="POST">
         <button type="submit" class="btn1 btn-primary1 btn-block1 btn-large1" formaction="/load" style="margin: 5px;">Load Database</button>
     </form>
+</div>
+<div class="clean footer" style="left:49%">
     <form action="/trafficAllTime" , method="GET">
         <button type="submit" class="btn1 btn-primary1 btn-block1 btn-large1" formaction="/dlRoute" style="margin: 5px;">Download All Routes as CSV</button>
+    </form>
+</div>
+<div class="clean footer" style="left:72%">
+    <form action="/trafficAllTime" , method="GET">
         <button type="submit" class="btn1 btn-primary1 btn-block1 btn-large1" formaction="/dlTweets" style="margin: 5px;">Download All Tweets as CSV</button>
     </form>
 </div>
+<hr class="fhr">
+<hr class="fhr" style="margin-top: 20px;">
 <div class="flash">
     {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -197,31 +228,34 @@ box-shadow: inset 0 -5px 45px rgba(100, 100, 100, 0.4), 0 1px 1px rgba(255, 255,
     {% endwith %}
 </div>
 
+<h4 class="image" style="color: white; top:25%">Twitr Traffic</h4>
 <div class="login1">
-    <h4 style="color: white;">Twitr Traffic</h4>
     <form action="/trafficAllTime" , method="POST">
+        <hr>
+        <hr>
         <input id="autocomplete" type="text" name="src" placeholder="Source" required="required" />
         <input id="autocomplete2" type="text" name="dest" placeholder="Destination" required="required" />
         <input type="hidden" id="srcLat" name="srcLat" />
         <input type="hidden" id="srcLng" name="srcLng" />
         <input type="hidden" id="destLat" name="destLat" />
         <input type="hidden" id="destLng" name="destLng" /> 
-        <button type="submit" class="btn1 btn-primary1 btn-block1 btn-large1">Get Traffic Tweets All Time</button>
-        <button type="submit" class="btn1 btn-primary1 btn-block1 btn-large1" formaction="/trafficStatusAllTime" style="margin-top: 5px;">Traffic Severity All Time</button>
-        <button type="submit" class="btn1 btn-primary1 btn-block1 btn-large1" formaction="/trafficNow" style="margin-top: 5px;">Get Traffic Tweets Now</button>
-        <button type="submit" class="btn1 btn-primary1 btn-block1 btn-large1" formaction="/trafficStatusNow" style="margin-top: 5px;">Traffic Severity Now</button>
+        <button title="Retrieve all the tweets based on the input route" type="submit" class="btn1 btn-primary1 btn-block1 btn-large1">Retrieve Tweets for Route</button>
+        <button title="Retrieve all the tweets along with the traffic-severity analysis" type="submit" class="btn1 btn-primary1 btn-block1 btn-large1" formaction="/trafficStatusAllTime" style="margin-top: 7px;">Check For Traffic Severity</button>
+        <button title="Retrieve today's tweets based on the input route" type="submit" class="btn1 btn-primary1 btn-block1 btn-large1" formaction="/trafficNow" style="margin-top: 7px;">Retrieve Real-time Traffic Tweets</button>
+        <button title="Retrieve today's tweets along with the traffic-severity analysis" type="submit" class="btn1 btn-primary1 btn-block1 btn-large1" formaction="/trafficStatusNow" style="margin-top: 7px;">Check For Real-time Traffic Severity</button>
+          <button title="Find all the Checkpoints/Places that come in a Route" type="submit" class="btn1 btn-primary1 btn-block1 btn-large1" formaction="/routeLoc" style="margin-top: 7px;">Find Checkpoints In The Route</button>
+          <hr>
         <hr>
-        <hr>
-        <button type="submit" class="btn1 btn-primary1 btn-block1 btn-large1" formaction="/routeLoc" style="margin-top: 5px;">Get Full Route</button>
     </form>
+</div>
 
     <hr>
     <hr>
-    <form action="/alltweets" , method="POST">
-        <button type="submit" class="btn1 btn-primary1 btn-block1 btn-large1" style="margin-top: 5px;">All Traffic Tweets</button>
+    <form class="sidebut" action="/alltweets" , method="POST">
+        <button title="Retrieve All The Tweets Related To Traffic" type="submit" class="btn1 btn-primary1 btn-block1 btn-large1" style="margin-top: 50px;">All Traffic Tweets</button>
     </form>
     
-    </div>
+
 
     <script src="js/index.js"></script>
 

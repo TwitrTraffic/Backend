@@ -377,8 +377,8 @@ def TrafficNow():
     except sqlite3.IntegrityError:
         print "Could not add"
 
-    insertRouteIntoDb(source[2], destination[2], locations)
-
+    #insertRouteIntoDb(source[2], destination[2], locations)
+    locations = getCheckpointLocations(source, destination)
     trafficTweets = getTrafficTweetsForRoute(locations, date, time)
     Tweets = []
     for tt in trafficTweets:
@@ -427,7 +427,7 @@ def TrafficAllTime():
         'srclong'], request.json['src']]
     destination = [request.json['destlat'],
                    request.json['destlong'], request.json['dest']]
-    insertRouteIntoDb(source[2], destination[2], locations)
+    #insertRouteIntoDb(source[2], destination[2], locations)
 
     locations = getCheckpointLocations(source, destination)
     trafficTweets = getTrafficTweetsForRouteAllTime(locations)
@@ -591,18 +591,22 @@ def checkpointsLocations():
     if not request.json:
         abort(400)
     if "srclat" not in request.json:
+        print "no srclat"
         abort(400)
     if "srclong" not in request.json:
+        print "no srclong"
         abort(400)
     if "destlat" not in request.json:
+        print "no destlat"
         abort(400)
     if "destlong" not in request.json:
+        print "no destlong"
         abort(400)
 
     # index '0'->lat ; '1'->long
     source = [request.json['srclat'], request.json['srclong']]
     destination = [request.json['destlat'], request.json['destlong']]
-    insertRouteIntoDb(source[2], destination[2], locations)
+    #insertRouteIntoDb(source[2], destination[2], locations)
     locations = getCheckpointLocations(source, destination)
 
     return jsonify({"source_lat": source[0], "source_long": source[1], "destination_lat": destination[0], "destination_long": destination[1], "checkpoints-locations": locations}), 201
@@ -635,7 +639,7 @@ def checkpointsCoordinates():
     # index '0'->lat ; '1'->long
     source = [request.json['srclat'], request.json['srclong']]
     destination = [request.json['destlat'], request.json['destlong']]
-    insertRouteIntoDb(source[2], destination[2], locations)
+    #insertRouteIntoDb(source[2], destination[2], locations)
     json_checkpoints = getCheckpoints(source, destination)
 
     return jsonify({"source_lat": source[0], "source_long": source[1], "destination_lat": destination[0], "destination_long": destination[1], "checkpoints-coordinates": json_checkpoints}), 201

@@ -31,16 +31,6 @@ def getTwitterFeed():
 
     oldest = alltweets[-1].id - 1
 
-    while len(new_tweets) > 0:
-        # while t > 0:
-
-        new_tweets = api.user_timeline(
-            'blrcitytraffic', count=200, max_id=oldest)
-
-        alltweets.extend(new_tweets)
-
-        oldest = alltweets[-1].id - 1
-
     for tweet in alltweets:
         if not tweet.retweeted and 'RT @' not in tweet.text:
             if '@' not in tweet.text:
@@ -59,16 +49,6 @@ def getTwitterFeed():
     alltweets.extend(new_tweets)
 
     oldest = alltweets[-1].id - 1
-
-    while len(new_tweets) > 0:
-        # while t > 0:
-
-        new_tweets = api.user_timeline(
-            'blrcitypolice', count=200, max_id=oldest)
-
-        alltweets.extend(new_tweets)
-
-        oldest = alltweets[-1].id - 1
 
     for tweet in alltweets:
         if not tweet.retweeted and 'RT @' not in tweet.text:
@@ -93,7 +73,8 @@ def retrieveAllblrTweets():
 
 
 def getCheckpoints(source, destination):
-    url = 'https://maps.googleapis.com/maps/api/directions/json?origin=12.9577133,77.6852271&destination=14.0187447,75.2582987&key=' + YOUR_API_KEY
+    print source,destination
+    url = "https://maps.googleapis.com/maps/api/directions/json?origin=" + str(source[0]) + "," + str(source[1]) + "&destination=" + str(destination[0]) + "," + str(destination[1]) + "&key=" + YOUR_API_KEY
     response = urlopen(url)
     json_obj = json.load(response)
 

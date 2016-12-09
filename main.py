@@ -158,29 +158,6 @@ def trafficStatusAllTime():
     locations = getCheckpointLocations(source, destination)
     final = getTrafficTweetsForRouteAllTime(locations)
     final_with_status = getTweetsWithStatus(final)
-    now = datetime.datetime.now()
-
-    date = now.strftime("%Y-%m-%d")
-    time = now.strftime("%H:%M:%S")
-
-    try:
-
-        g.db.execute('insert into routes values (?, ?, ?, ?)',
-                     [source[2], destination[2], date, time])
-        g.db.commit()
-
-        g.db.execute('insert into coordinates values (?, ?, ?)',
-                     [source[2], source[0], source[1]])
-        g.db.commit()
-
-        g.db.execute('insert into coordinates values (?, ?, ?)', [
-                     destination[2], destination[0], destination[1]])
-        g.db.commit()
-
-    except sqlite3.IntegrityError:
-        print "Could not add"
-
-    insertRouteIntoDb(source[2], destination[2], locations)
 
     return render_template("showRouteStatus.html", tweets=final_with_status)
 
@@ -493,6 +470,32 @@ def TrafficStatusAllTime():
         Tweets.append(d)
 
     return jsonify({"source": source[2], "destination": destination[2], "tweets": Tweets}), 201
+
+#-------------------------------------------------------------------------
+@app.route("/api/trafficStatusAllTime", methods=['POST'])
+def trafficStatusAllTimeAPI():
+    if not request.json:
+        abort(400)
+    if "srclat" not in request.json:
+        abort(400)
+    if "srclong" not in request.json:
+        abort(400)
+    if "destlat" not in request.json:
+        abort(400)
+    if "destlong" not in request.json:
+        abort(400)
+
+    source = [request.json['srclat'], request.json['srclong']]
+    destination = [request.json['destlat'], request.json['destlong']]
+
+    print source
+
+    # index '0'->lat ; '1'->long
+    locations = getCheckpointLocations(source, destination)
+    final = getTrafficTweetsForRouteAllTime(locations)
+    final_with_status = getTweetsWithStatus(final)
+
+    return jsonify({"response": final_with_status}), 201
 
 #-------------------------------------------------------------------------
 

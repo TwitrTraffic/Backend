@@ -51,9 +51,9 @@ def getTweetsWithStatus(final):
     inst = []
     total = neu + neg + pos
 
-    inst.append((float(pos) / total) * 100)
-    inst.append((float(neu) / total) * 100)
-    inst.append((float(neg) / total) * 100)
+    inst['positive'] = ((float(pos) / total) * 100)
+    inst['neutral'] = ((float(neu) / total) * 100)
+    inst['negative'] = ((float(neg) / total) * 100)
     temp.append(inst)
     new_list = temp + finalWithStatus
 

@@ -166,3 +166,57 @@ Example:
 ```
 curl -i -H "Content-Type: application/json" -X POST -d '{"srclat":"40.81381340000001","srclong":"-74.06693179999999","destlat":"40.8145647","destlong":"-74.06878929999999"}' http://localhost:5000/api/checkpoints/coordinates
 ```
+
+- Retrieve all status and tweets
+
+Sample Data:
+```
+{
+  "srclat":"40.81381340000001",
+  "srclong":"-74.06693179999999",
+  "destlat":"40.8145647",
+  "destlong":"-74.06878929999999",
+}
+```
+Sample Response:
+```
+{
+  "response": [
+    {
+      "negative": 59.310344827586206, 
+      "neutral": 37.93103448275862, 
+      "positive": 2.7586206896551726
+    }, 
+    {
+      "date": "2016-12-06", 
+      "status": "Negative", 
+      "time": "03:52:37", 
+      "tweet": "Slow moving traffic at Ejipura Jn form Sony signal on IRR, Marathahalli bridge and Ibluru bus stop form 
+Agara"
+    }, 
+    {
+      "date": "2016-12-06", 
+      "status": "Caution", 
+      "time": "13:53:07", 
+      "tweet": "Peak hour traffic at Vellara jn towards Anepalya jn, Sagar hospital jn from Dairy circle, Jalahalli cros
+s jn from 8th mile jn on Tumkur road"
+    }, 
+    {
+      "date": "2016-12-06", 
+      "status": "Positive", 
+      "time": "01:21:51", 
+      "tweet": "#BCP : 250 #Hoysala are #Alerted and #watching #City #Safe  #Situation is very #normal in #city. https:/
+/t.co/TEa5ThwY81"
+    }, 
+
+    .
+    .
+    .
+ ]
+}
+```
+
+Example:
+```
+curl -i -H "Content-Type: application/json" -X POST -d '{"srclat":"13.0358","srclong":"77.5970","destlat":"12.9592","destlong":"77.6974"}' http://jith.tk:5000/api/trafficStatusAllTime 
+```

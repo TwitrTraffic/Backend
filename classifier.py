@@ -48,7 +48,7 @@ def getTweetsWithStatus(final):
 
     new_list = []
     temp = []
-    inst = []
+    inst = {}
     total = neu + neg + pos
 
     inst['positive'] = ((float(pos) / total) * 100)

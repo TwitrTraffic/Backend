@@ -10,6 +10,8 @@ train = [
     ('expect traffic holdup', 'neg'),
     ('more rush', 'neg'),
     ('Traffic is restored', 'pos'),
+    ('safe', 'pos'),
+    ('normal', 'pos'),
     ('traffic cleared', 'pos'),
     ('Peak hour traffic', 'neu'),
     (' Routes to avoid', 'neu'),

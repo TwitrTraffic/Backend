@@ -472,6 +472,7 @@ def TrafficStatusAllTime():
     return jsonify({"source": source[2], "destination": destination[2], "tweets": Tweets}), 201
 
 #-------------------------------------------------------------------------
+
 @app.route("/api/trafficStatusAllTime", methods=['POST'])
 def trafficStatusAllTimeAPI():
     if not request.json:

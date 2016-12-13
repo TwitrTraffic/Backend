@@ -31,18 +31,18 @@ def getTweetsWithStatus(final):
 
     neg = neu = pos = total = 0
     for tweet in final:
-        inst = []
-        inst.append(tweet[0])
-        inst.append(tweet[1])
-        inst.append(tweet[2])
+        inst = {}
+        inst['tweet'] = tweet[0]
+        inst['time'] = tweet[1]
+        inst['date'] = tweet[2]
         if classify(tweet[0]) == "neg":
-            inst.append("Negative")
+            inst['status'] = "Negative"
             neg = neg + 1
         elif classify(tweet[0]) == "pos":
-            inst.append("Positive")
+            inst['status'] = "Positive"
             pos = pos + 1
         elif classify(tweet[0]) == "neu":
-            inst.append("Caution")
+            inst['status'] = "Caution"
             neu = neu + 1
         finalWithStatus.append(inst)
 

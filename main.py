@@ -1,6 +1,6 @@
 import datetime
 import sqlite3
-from flask import Flask, flash, render_template, redirect, url_for, jsonify, make_response, request, abort, g, flash, send_file
+from flask import Flask, render_template, redirect, url_for, jsonify, make_response, request, abort, g, flash, send_file
 from helpers import *
 from contextlib import closing
 from classifier import getTweetsWithStatus
